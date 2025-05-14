@@ -1,110 +1,69 @@
 import os
 import time
 
-os.system("cls || clear")
+class Funcionario:
+    def __inicio__(self, nome, cpf, cargo, salario):
+        self.nome = nome.lower()
+        self.cpf = cpf
+        self.cargo = cargo.lower()
+        self.salario = salario
 
-# Função para verificar se a lista está vazia.
-def verificar_lista_vazia(lista_funcionarios):
-    if not lista_funcionarios:
-        print("\nA lista está vazia.")
-        return True
-    return False
+class CadastroFuncionarios:
+    def __inicio__(self):
+        self.funcionarios = []
 
-# Função para adicionar.
-def adicionar_funcionario(lista_funcionarios):
-    nome = input("Nome: ").lower()
-    cpf = input("CPF: ")
-    cargo = input("Cargo: ").lower()
-    salario = input("Salário: ")
-    funcionario = {
-        "nome": nome,
-        "cpf": cpf,
-        "cargo": cargo,
-        "salario": salario
-    }
-    lista_funcionarios.append(funcionario)
-    print(f"\n{nome} adicionado com sucesso.")
+    def verificar_lista_vazia(self):
+        if not self.funcionarios:
+            print("\nA lista está vazia.")
+            return True
+        return False
 
-# Função para mostrar todos os funcionários.
-def mostrar_funcionarios(lista_funcionarios):
-    if verificar_lista_vazia(lista_funcionarios):
-        return
-    print("\n - Lista de funcionários - ")
-    for f in lista_funcionarios:
-        print(f"- Nome: {f['nome']}, Data de Nascimento: {f['salario']}, CPF: {f['cpf']}, Função: {f['cargo']}")
+    def adicionar_funcionario(self):
+        nome = input("Nome: ")
+        cpf = input("CPF: ")
+        cargo = input("Cargo: ")
+        salario = input("Salário: ")
+        funcionario = Funcionario(nome, cpf, cargo, salario)
+        self.funcionarios.append(funcionario)
+        print(f"\n{nome} adicionado com sucesso.")
 
-# Função para atualizar.
-def atualizar_funcionario(lista_funcionarios):
-    if verificar_lista_vazia(lista_funcionarios):
-        return
-    mostrar_funcionarios(lista_funcionarios)
-    nome_antigo = input("Digite o nome do funcionário que deseja atualizar: ").lower()
-    for funcionario in lista_funcionarios:
-        if funcionario["nome"] == nome_antigo:
-            funcionario["nome"] = input(f"Novo nome para {nome_antigo} (ou ENTER para manter): ").lower() or funcionario["nome"]
-            funcionario["salario"] = input(f"Novo salário (ou ENTER para manter): ") or funcionario["salario"]
-            funcionario["cpf"] = input(f"Novo CPF (ou ENTER para manter): ") or funcionario["cpf"]
-            funcionario["cargo"] = input(f"Novo cargo (ou ENTER para manter): ").lower() or funcionario["cargo"]
-            print(f"{nome_antigo} foi atualizado.")
+    def mostrar_funcionarios(self):
+        if self.verificar_lista_vazia():
             return
-    print(f"\nO nome {nome_antigo} não foi encontrado.")
+        print("\n - Lista de funcionários - ")
+        for f in self.funcionarios:
+            print(f"- Nome: {f.nome}, Salário: {f.salario}, CPF: {f.cpf}, Função: {f.cargo}")
 
-# Função para atualizar arquivo.
-def atualizar_funcionario_arquivo(nome_arquivo):
-    # Lê todos os funcionários do arquivo
-    funcionarios = []
-    with open(nome_arquivo, "r") as f:
-        for linha in f:
-            nome, cpf, cargo, salario = linha.strip().split(", ")
-            funcionarios.append({
-                "nome": nome,
-                "cpf": cpf,
-                "cargo": cargo,
-                "salario": salario
-            })
-
-    # Mostra funcionários e pede qual atualizar
-    print("\n - Lista de funcionários - ")
-    for f in funcionarios:
-        print(f"- Nome: {f['nome']}, CPF: {f['cpf']}, Cargo: {f['cargo']}, Salário: {f['salario']}")
-    nome_antigo = input("Digite o nome do funcionário que deseja atualizar: ").lower()
-
-    atualizado = False
-    for funcionario in funcionarios:
-        if funcionario["nome"] == nome_antigo:
-            funcionario["nome"] = input(f"Novo nome para {nome_antigo} (ou ENTER para manter): ").lower() or funcionario["nome"]
-            funcionario["salario"] = input(f"Novo salário (ou ENTER para manter): ") or funcionario["salario"]
-            funcionario["cpf"] = input(f"Novo CPF (ou ENTER para manter): ") or funcionario["cpf"]
-            funcionario["cargo"] = input(f"Novo cargo (ou ENTER para manter): ").lower() or funcionario["cargo"]
-            atualizado = True
-            print(f"{nome_antigo} foi atualizado.")
-            break
-    if not atualizado:
+    def atualizar_funcionario(self):
+        if self.verificar_lista_vazia():
+            return
+        self.mostrar_funcionarios()
+        nome_antigo = input("Digite o nome do funcionário que deseja atualizar: ").lower()
+        for funcionario in self.funcionarios:
+            if funcionario.nome == nome_antigo:
+                funcionario.nome = input(f"Novo nome para {nome_antigo} (ou ENTER para manter): ").lower() or funcionario.nome
+                funcionario.salario = input(f"Novo salário (ou ENTER para manter): ") or funcionario.salario
+                funcionario.cpf = input(f"Novo CPF (ou ENTER para manter): ") or funcionario.cpf
+                funcionario.cargo = input(f"Novo cargo (ou ENTER para manter): ").lower() or funcionario.cargo
+                print(f"{nome_antigo} foi atualizado.")
+                return
         print(f"\nO nome {nome_antigo} não foi encontrado.")
-        return
 
-    # Sobrescreve o arquivo com a lista atualizada
-    with open(nome_arquivo, "w") as f:
-        for funcionario in funcionarios:
-            f.write(f"{funcionario['nome']}, {funcionario['cpf']}, {funcionario['cargo']}, {funcionario['salario']}\n")
-
-# Função para excluir.
-def excluir_funcionario(lista_funcionarios):
-    if verificar_lista_vazia(lista_funcionarios):
-        return
-    mostrar_funcionarios(lista_funcionarios)
-    nome_remover = input("Digite o nome do funcionário que deseja remover: ").lower()
-    for funcionario in lista_funcionarios:
-        if funcionario["nome"] == nome_remover:
-            lista_funcionarios.remove(funcionario)
-            print(f"{nome_remover} foi removido com sucesso.")
+    def excluir_funcionario(self):
+        if self.verificar_lista_vazia():
             return
-    print(f"O nome {nome_remover} não foi encontrado.")
+        self.mostrar_funcionarios()
+        nome_remover = input("Digite o nome do funcionário que deseja remover: ").lower()
+        for funcionario in self.funcionarios:
+            if funcionario.nome == nome_remover:
+                self.funcionarios.remove(funcionario)
+                print(f"{nome_remover} foi removido com sucesso.")
+                return
+        print(f"O nome {nome_remover} não foi encontrado.")
 
-# Lista de funcionários.
-funcionarios = []
+# Uso das classes no menu principal
+cadastro = CadastroFuncionarios()
 
-# Mostrando menu.
 while True:
     print("""
     ===Bem vindo ao cadastro de funcionários DENDÊ TECH===
@@ -118,17 +77,10 @@ while True:
 
     match opcao:
         case 1:
-            adicionar_funcionario(funcionarios)
-
-            nome_arquivo = "Cadastro de funcionarios.csv"
-            with open(nome_arquivo, "a") as cadastro_funcionarios:
-                for funcionario in funcionarios:
-                    cadastro_funcionarios.write(
-                        f"{funcionario['nome']}, {funcionario['cpf']}, {funcionario['cargo']}, {funcionario['salario']}\n"
-                    )
+            cadastro.adicionar_funcionario()
         case 2:
             os.system("cls || clear")
-            mostrar_funcionarios(funcionarios)
+            cadastro.mostrar_funcionarios()
             decisao = input("Digite (s) para voltar ao menu ou (n) para encerrar o programa: ").lower()
             if decisao == "s":
                 os.system("cls || clear")
@@ -136,10 +88,9 @@ while True:
             else:
                 break
         case 3:
-            nome_arquivo = "Cadastro de funcionarios.csv"
-            atualizar_funcionario_arquivo(nome_arquivo)
+            cadastro.atualizar_funcionario()
         case 4:
-            excluir_funcionario(funcionarios)
+            cadastro.excluir_funcionario()
         case 5:
             print("\nPrograma sendo encerrado", end="", flush=True)
             for _ in range(3):
