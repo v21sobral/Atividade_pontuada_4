@@ -1,6 +1,8 @@
 import os
 import time
+from dataclasses import dataclass
 
+@dataclass
 class Funcionario:
     def __inicio__(self, nome, cpf, cargo, salario):
         self.nome = nome.lower()
